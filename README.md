@@ -54,15 +54,23 @@ If successful, it will log We are live on 8000.
 In Postman, send requests to localhost:8000. 
 
 Available requests: 
+
   Create: Post request to localhost:8000/movies
-      enter form data under x-www-form-urlencoded. Available keys: title, id, year, genres
+  
+     enter form data under x-www-form-urlencoded. Available keys: title, id, year, genres
+      
   Read: Get request to localhost:8000/movies/id
+  
   Update: Put request to localhost:8000/movies/id
+  
   Destroy: Delete request to localhost:8000/movies/id
   
   Find all movies, ordered by year: Get request to localhost:8000/movies
+  
   List years by order of years with the most movies: Get request to localhost:8000/year
+  
   Index of genres: Get request to localhost:8000/genres
+  
   Endpoint for a particular genre that includes a listing of the genre’s movies: Get request to localhost:8000/genremovies
 
 ## Built With
