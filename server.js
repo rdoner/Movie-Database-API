@@ -12,6 +12,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 MongoClient.connect(db.url, (err, database) => {
   if (err) return console.log(err)
+   // 	db = database.db("movieDatabase")
+  	// require('./app/routes')(app, db);
   require('./app/routes')(app, database);
   
   app.listen(port, () => {
