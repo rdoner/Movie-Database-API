@@ -13,10 +13,7 @@ module.exports = function(app, db) {
       if (err) { 
         res.send({ 'error': 'An error has occurred' }); 
       } else {
-      //ops Contains the documents inserted with added _id fields
-        //res.send(result.ops[0]);
         res.send(result.ops[0]);
-        //res.send("posted");
       }
     });
   });
@@ -38,7 +35,6 @@ module.exports = function(app, db) {
   app.put('/movies/:id', (req, res) => {
     const id = req.params.id;
     const details = { '_id': new ObjectID(id) };
-    //fix this line
     const movie = { title: req.body.title, id: req.body.id, year: req.body.year, genres: req.body.genres};
     db.collection('movies').update(details, movie, (err, result) => {
       if (err) {
@@ -80,11 +76,9 @@ module.exports = function(app, db) {
   app.get('/year', (req,res) => {
     db.collection('movies').aggregate([{$group : {_id : "$year", num_movies : {$sum : 1}}}, {$sort: {"num_movies": -1}}], 
         (err, result) => {
-     // console.log(result);
         if(err) {
           console.log(err);
         } else {
-          //res.send(JSON.stringify(allMovies));
           res.send(result);
         } 
     });
@@ -105,7 +99,6 @@ module.exports = function(app, db) {
 
 //An endpoint for a particular genre that includes a listing of the genre’s movie(s).
   app.get('/genremovies', (req,res) => {
-    //const genre = req.params.genre;
     db.collection('movies').aggregate([
           {$group: {_id: "$genres" /*, genres: { $push: "$genres" */}},
           {$sort: {genre:-1}}
