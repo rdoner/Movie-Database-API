@@ -8,10 +8,7 @@ module.exports = function(app, db) {
 
   //CREATE route
   app.post('/movies', (req, res) => {
-    //fix this const
     const movie = { title: req.body.title, id: req.body.id, year: req.body.year, genres: req.body.genres};
-        //returns  "genres": "\"porn\", \"comedy\", \"horror\", \"drama\""
-    //const movie = { text: req.body.body, title: req.body.title };
     db.collection('movies').insert(movie, (err, result) => {
       if (err) { 
         res.send({ 'error': 'An error has occurred' }); 
@@ -79,13 +76,8 @@ module.exports = function(app, db) {
     });          
   });
   
-  //List movies by years that produced the most movies first
+  //List years by order of years with the most movies
   app.get('/year', (req,res) => {
-    
-    //testing:
-    //db.collection('movies').aggregate([{$group : {_id : "$year", num_movies : {$sum : 1}}}],
-    
-    //Somewhat correct: only lists the years not the movies
     db.collection('movies').aggregate([{$group : {_id : "$year", num_movies : {$sum : 1}}}, {$sort: {"num_movies": -1}}], 
         (err, result) => {
      // console.log(result);
@@ -100,26 +92,13 @@ module.exports = function(app, db) {
 
   //index of genres
   app.get('/genres', (req,res) => {
-    
-    //testing this route:
-    //db.collection('movies').aggregate([{$group : {_id : "$genres", num_movies : {$sum : 1}}}, {$sort: {"num_movies": -1}}], 
-   
-    //working, but unordered route:
     db.collection('movies').distinct("genres",
-    
-    //fluff:
-    //db.collection('movies').find({}, {"title": 1, _id:0}).sort({"year": 1}).toArray((err,result) => {
-    // db.collection('movies').aggregate([
-    //   {$group: {_id: "$genres" /*, genres: { $push: "$genres" */}},
-    //   {$sort: {genre:-1}}
     (err, result) => {
         if(err) {
           console.log(err);
         } else {
-          //res.send(JSON.stringify(allMovies));
           res.send(result);
         } 
-      // }
     });
   });
 
@@ -131,26 +110,13 @@ module.exports = function(app, db) {
           {$group: {_id: "$genres" /*, genres: { $push: "$genres" */}},
           {$sort: {genre:-1}}
           ]
-      (err, result) => {
-        if(err) {
-          console.log(err);
-        } else {
-          res.send(result);
+          (err, result) => {
+          if(err) {
+             console.log(err);
+          } else {
+             res.send(result);
         } 
     });
   });
-  //READ route
-  // app.get('/movies/:id', (req, res) => {
-  //   const id = req.params.id;
-  //   const details = { '_id': new ObjectID(id) };
-  //   db.collection('movies').findOne(details, (err, item) => {
-  //     if (err) {
-  //       res.send({'error':'An error has occurred'});
-  //     } else {
-  //       res.send(item);
-  //     } 
-  //   });
-  // });
-
 };
 
